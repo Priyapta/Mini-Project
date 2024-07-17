@@ -1,12 +1,13 @@
 # Todo App
 
-Todo App using local database.
+Todo App uses a local database.
 
-## Getting Started
+## 
 
-This is mini project making Todo App .
+This is a Mini Project making a Todo App using Flutter
 
+It's a simple web just for hosting with github
 
-Later update use firebase
-This the link:
+Later updates use firebase database
+This is the link:
 https://priyapta.github.io/
