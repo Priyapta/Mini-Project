@@ -8,6 +8,7 @@ import 'package:fluttter_todo/component/todotile.dart';
 import 'package:fluttter_todo/storing/database.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _addTask = TextEditingController();
   TextEditingController dateStartController = TextEditingController();
   TextEditingController dateEndController = TextEditingController();
+  bool isChecked = false;
 
   void initState() {
     if (mybox.get("TODOLIST") == null) {
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         "Task": false,
         "Start": dateStartController.text,
         "End": dateEndController.text,
-        "Priority": false,
+        "Priority": isChecked,
       });
       db.updateTask();
     });
@@ -80,7 +82,15 @@ class _HomePageState extends State<HomePage> {
 
   //Melakukan update task pada homepage
   void updateCurrentList() {
-    todoList = db.todoList;
+    setState(() {
+      todoList = db.todoList;
+    });
+  }
+
+  void updateChecked(bool newChecked) {
+    setState(() {
+      isChecked = newChecked; // Update isChecked with the new value
+    });
   }
 
   @override
@@ -103,6 +113,7 @@ class _HomePageState extends State<HomePage> {
               itemCount: todoList.length,
               itemBuilder: (context, index) {
                 return TodoTile(
+                  deleteFunction: (context) => deleteTask(index),
                   taskName: db.todoList[index]["Tugas"],
                   taskComplete: db.todoList[index]["Task"],
                   onChanged: (value) => toggleTask(value, index),
@@ -145,6 +156,8 @@ class _HomePageState extends State<HomePage> {
                 hintText: "Add Task",
                 dateStartController: dateStartController,
                 dateEndController: dateEndController,
+                isChecked: isChecked,
+                updateChecked: updateChecked,
               ),
             ),
           );

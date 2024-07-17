@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class TodoTile extends StatelessWidget {
   final String taskName;
   final bool taskComplete;
   final Function(bool?)? onChanged;
   final VoidCallback? onTap;
+  final Function(BuildContext)? deleteFunction;
 
   const TodoTile({
     super.key,
@@ -12,6 +14,7 @@ class TodoTile extends StatelessWidget {
     required this.taskComplete,
     required this.onChanged,
     required this.onTap,
+    required this.deleteFunction,
   });
 
   @override
@@ -24,35 +27,43 @@ class TodoTile extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       child: GestureDetector(
         onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.all(24),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  taskName,
-                  style: TextStyle(
-                    fontFamily: "roboto",
-                    fontSize: 15,
-                    color: textColor,
+        child: Slidable(
+          endActionPane: ActionPane(motion: StretchMotion(), children: [
+            SlidableAction(
+                onPressed: deleteFunction,
+                icon: Icons.delete,
+                backgroundColor: Colors.red)
+          ]),
+          child: Container(
+            padding: EdgeInsets.all(24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    taskName,
+                    style: TextStyle(
+                      fontFamily: "roboto",
+                      fontSize: 15,
+                      color: textColor,
+                    ),
                   ),
                 ),
-              ),
-              Checkbox(value: taskComplete, onChanged: onChanged)
-            ],
-          ),
-          decoration: BoxDecoration(
-            color: boxColor,
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: borderColor, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                spreadRadius: 2,
-                blurRadius: 5,
-                offset: Offset(0, 3),
-              )
-            ],
+                Checkbox(value: taskComplete, onChanged: onChanged)
+              ],
+            ),
+            decoration: BoxDecoration(
+              color: boxColor,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: borderColor, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                )
+              ],
+            ),
           ),
         ),
       ),
